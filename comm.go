@@ -78,6 +78,17 @@ func (p *PubSub) handleNewStream(s network.Stream) {
 		}
 
 		rpc.from = peer
+
+		evt := &pb.TraceEvent{
+			Type:   pb.TraceEvent_RECV_INIT_RPC.Enum(),
+			PeerID: []byte(peer),
+		}
+		p.tracer.tracer.Trace(evt)
+
+		if len(p.incoming) == cap(p.incoming) {
+			log.Debug("---TEST incoming rpc is full! ---")
+		}
+
 		select {
 		case p.incoming <- rpc:
 		case <-p.ctx.Done():
