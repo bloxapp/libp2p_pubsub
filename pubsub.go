@@ -221,7 +221,7 @@ type Message struct {
 	ID            string
 	ReceivedFrom  peer.ID
 	ValidatorData interface{}
-	Local bool
+	Local         bool
 }
 
 func (m *Message) GetFrom() peer.ID {
@@ -251,7 +251,7 @@ func NewPubSub(ctx context.Context, h host.Host, rt PubSubRouter, opts ...Option
 		signID:                h.ID(),
 		signKey:               nil,
 		signPolicy:            StrictSign,
-		incoming:              make(chan *RPC, 32),
+		incoming:              make(chan *RPC, 128),
 		newPeers:              make(chan struct{}, 1),
 		newPeersPend:          make(map[peer.ID]struct{}),
 		newPeerStream:         make(chan network.Stream),
