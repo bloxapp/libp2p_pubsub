@@ -86,7 +86,7 @@ func (p *PubSub) handleNewStream(s network.Stream) {
 		p.tracer.tracer.Trace(evt)
 
 		if len(p.incoming) == cap(p.incoming) {
-			log.Debug("---TEST incoming rpc is full! ---")
+			log.Debug("---TEST incoming rpc is full! ----")
 		}
 
 		select {
