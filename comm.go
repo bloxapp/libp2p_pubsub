@@ -81,7 +81,11 @@ func (p *PubSub) handleNewStream(s network.Stream) {
 
 		evt := &pb.TraceEvent{
 			Type:   pb.TraceEvent_RECV_INIT_RPC.Enum(),
-			PeerID: []byte(peer),
+			PeerID: []byte(p.tracer.pid),
+			RecvRPC: &pb.TraceEvent_RecvRPC{
+				ReceivedFrom: []byte(rpc.from),
+				Meta:         p.tracer.traceRPCMeta(rpc),
+			},
 		}
 		p.tracer.tracer.Trace(evt)
 
