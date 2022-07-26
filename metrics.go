@@ -10,6 +10,10 @@ var (
 		Name: "libp2p:pubsub:incoming",
 		Help: "Count incoming messages",
 	})
+	metricsPubsubIncomingDispatched = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "libp2p:pubsub:incoming:dispatched",
+		Help: "Count incoming messages",
+	})
 	metricsPubsubIncomingFull = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "libp2p:pubsub:incoming:full",
 		Help: "Count the amount of times the incoming queue is full",
@@ -18,4 +22,6 @@ var (
 
 func init() {
 	_ = prometheus.Register(metricsPubsubIncoming)
+	_ = prometheus.Register(metricsPubsubIncomingDispatched)
+	_ = prometheus.Register(metricsPubsubIncomingFull)
 }

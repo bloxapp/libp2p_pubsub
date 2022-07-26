@@ -94,6 +94,7 @@ func (p *PubSub) handleNewStream(s network.Stream) {
 
 		select {
 		case p.incoming <- rpc:
+			metricsPubsubIncomingDispatched.Inc()
 		case <-p.ctx.Done():
 			// Close is useless because the other side isn't reading.
 			s.Reset()
