@@ -85,8 +85,13 @@ func (p *PubSub) handleNewStream(s network.Stream) {
 		}
 		p.tracer.tracer.Trace(evt)
 
+		metricsPubsubIncoming.Inc()
+
 		if len(p.incoming) == cap(p.incoming) {
+			metricsPubsubIncomingFull.Set(1.0)
 			log.Debug("---TEST incoming rpc is full! ----")
+		} else {
+			metricsPubsubIncomingFull.Set(0.0)
 		}
 
 		select {

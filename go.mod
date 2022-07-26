@@ -12,5 +12,6 @@ require (
 	github.com/libp2p/go-libp2p-testing v0.9.2
 	github.com/libp2p/go-msgio v0.2.0
 	github.com/multiformats/go-multiaddr v0.5.0
+	github.com/prometheus/client_golang v1.12.1
 	github.com/whyrusleeping/timecache v0.0.0-20160911033111-cfcb2f1abfee
 )
