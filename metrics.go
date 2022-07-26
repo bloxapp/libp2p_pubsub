@@ -10,9 +10,9 @@ var (
 		Name: "libp2p:pubsub:incoming",
 		Help: "Count incoming messages",
 	})
-	metricsPubsubIncomingFull = promauto.NewGauge(prometheus.GaugeOpts{
+	metricsPubsubIncomingFull = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "libp2p:pubsub:incoming:full",
-		Help: "Indicates that incoming channel is full",
+		Help: "Count the amount of times the incoming queue is full",
 	})
 )
 
