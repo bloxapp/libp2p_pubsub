@@ -18,10 +18,16 @@ var (
 		Name: "libp2p:pubsub:incoming:full",
 		Help: "Count the amount of times the incoming queue is full",
 	})
+
+	metricsDuration = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "libp2p:pubsub:process:duration",
+		Help: "duration of process",
+	})
 )
 
 func init() {
 	_ = prometheus.Register(metricsPubsubIncoming)
 	_ = prometheus.Register(metricsPubsubIncomingDispatched)
 	_ = prometheus.Register(metricsPubsubIncomingFull)
+	_ = prometheus.Register(metricsDuration)
 }

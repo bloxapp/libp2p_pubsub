@@ -541,9 +541,11 @@ func (p *PubSub) processLoop(ctx context.Context) {
 	for {
 		select {
 		case <-p.newPeers:
+			log.Debug("BLOX - new peers")
 			p.handlePendingPeers()
 
 		case s := <-p.newPeerStream:
+			log.Debug("BLOX - new peers stream")
 			pid := s.Conn().RemotePeer()
 
 			ch, ok := p.peers[pid]
@@ -564,30 +566,40 @@ func (p *PubSub) processLoop(ctx context.Context) {
 			p.rt.AddPeer(pid, s.Protocol())
 
 		case pid := <-p.newPeerError:
+			log.Debug("BLOX - new peers error")
 			delete(p.peers, pid)
 
 		case <-p.peerDead:
+			log.Debug("BLOX - peer dead")
 			p.handleDeadPeers()
 
 		case treq := <-p.getTopics:
+			log.Debug("BLOX - get topics")
 			var out []string
 			for t := range p.mySubs {
 				out = append(out, t)
 			}
 			treq.resp <- out
 		case topic := <-p.addTopic:
+			log.Debug("BLOX - add topic")
 			p.handleAddTopic(topic)
 		case topic := <-p.rmTopic:
+			log.Debug("BLOX - remove topic")
 			p.handleRemoveTopic(topic)
 		case sub := <-p.cancelCh:
+			log.Debug("BLOX - cancel sub")
 			p.handleRemoveSubscription(sub)
 		case sub := <-p.addSub:
+			log.Debug("BLOX - add sub")
 			p.handleAddSubscription(sub)
 		case relay := <-p.addRelay:
+			log.Debug("BLOX - add relay")
 			p.handleAddRelay(relay)
 		case topic := <-p.rmRelay:
+			log.Debug("BLOX - remove relay")
 			p.handleRemoveRelay(topic)
 		case preq := <-p.getPeers:
+			log.Debug("BLOX - get peers")
 			tmap, ok := p.topics[preq.topic]
 			if preq.topic != "" && !ok {
 				preq.resp <- nil
@@ -605,21 +617,27 @@ func (p *PubSub) processLoop(ctx context.Context) {
 			}
 			preq.resp <- peers
 		case rpc := <-p.incoming:
+			log.Debug("BLOX - incoming rpc")
 			p.handleIncomingRPC(rpc)
 
 		case msg := <-p.sendMsg:
+			log.Debug("BLOX - send msg")
 			p.publishMessage(msg)
 
 		case req := <-p.addVal:
+			log.Debug("BLOX - add validator")
 			p.val.AddValidator(req)
 
 		case req := <-p.rmVal:
+			log.Debug("BLOX - remove validator")
 			p.val.RemoveValidator(req)
 
 		case thunk := <-p.eval:
+			log.Debug("BLOX - eval")
 			thunk()
 
 		case pid := <-p.blacklistPeer:
+			log.Debug("BLOX - black list peer")
 			log.Infof("Blacklisting peer %s", pid)
 			p.blacklist.Add(pid)
 
@@ -637,6 +655,7 @@ func (p *PubSub) processLoop(ctx context.Context) {
 			}
 
 		case <-ctx.Done():
+			log.Debug("BLOX - ctx done")
 			log.Info("pubsub processloop shutting down")
 			return
 		}
