@@ -989,7 +989,7 @@ func (gs *GossipSubRouter) Publish(msg *Message) {
 			if !gs.feature(GossipSubFeatureMesh, gs.peers[p]) && gs.score.Score(p) >= gs.publishThreshold {
 				tosend[p] = struct{}{}
 			} else {
-				log.Debugf("blox - publish to topic [%s]. peer not added. score %f for peer %s", topic, gs.score.Score(p), p)
+				log.Debugf("blox - publish to topic [%s]. peer not added. score %f | threshold %f | protocol [%s] for peer %s", topic, gs.score.Score(p), gs.publishThreshold, gs.peers[p], p)
 			}
 		}
 
