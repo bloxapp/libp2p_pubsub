@@ -3,6 +3,7 @@ package pubsub
 import (
 	"context"
 	"fmt"
+	"go.uber.org/zap"
 	"math/rand"
 	"sort"
 	"time"
@@ -1016,6 +1017,7 @@ func (gs *GossipSubRouter) Publish(msg *Message) {
 	}
 
 	out := rpcWithMessages(msg.Message)
+	log.Debug("blox - publish", zap.Int("toSend", len(tosend)), zap.Any("peers", tosend))
 	for pid := range tosend {
 		if pid == from || pid == peer.ID(msg.GetFrom()) {
 			continue
