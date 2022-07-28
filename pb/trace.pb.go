@@ -38,6 +38,7 @@ const (
 	TraceEvent_LEAVE             TraceEvent_Type = 10
 	TraceEvent_GRAFT             TraceEvent_Type = 11
 	TraceEvent_PRUNE             TraceEvent_Type = 12
+	TraceEvent_RECV_INIT_RPC     TraceEvent_Type = 13
 )
 
 var TraceEvent_Type_name = map[int32]string{
@@ -54,6 +55,7 @@ var TraceEvent_Type_name = map[int32]string{
 	10: "LEAVE",
 	11: "GRAFT",
 	12: "PRUNE",
+	13: "RECV_INIT_RPC",
 }
 
 var TraceEvent_Type_value = map[string]int32{
@@ -70,6 +72,7 @@ var TraceEvent_Type_value = map[string]int32{
 	"LEAVE":             10,
 	"GRAFT":             11,
 	"PRUNE":             12,
+	"RECV_INIT_RPC":     13,
 }
 
 func (x TraceEvent_Type) Enum() *TraceEvent_Type {
