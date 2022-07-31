@@ -995,6 +995,8 @@ func (gs *GossipSubRouter) Publish(msg *Message) {
 			}
 		}
 
+		log.Debugf("blox - publish to topic [%s]. done with floodsub peers. count - %d", topic, len(tosend))
+
 		// gossipsub peers
 		gmap, ok := gs.mesh[topic]
 		if !ok {
@@ -1015,6 +1017,7 @@ func (gs *GossipSubRouter) Publish(msg *Message) {
 			gs.lastpub[topic] = time.Now().UnixNano()
 		}
 
+		log.Debugf("blox - publish to topic [%s]. adding mesh peers. count - %d", topic, len(gmap))
 		for p := range gmap {
 			tosend[p] = struct{}{}
 		}
