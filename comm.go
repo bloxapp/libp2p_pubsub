@@ -77,6 +77,19 @@ func (p *PubSub) handleNewStream(s network.Stream) {
 			return
 		}
 
+		now := time.Now().UnixNano()
+		evt := &pb.TraceEvent{
+			Type:      pb.TraceEvent_RECV_INIT_RPC.Enum(),
+			PeerID:    []byte(p.tracer.pid),
+			Timestamp: &now,
+			RecvRPC: &pb.TraceEvent_RecvRPC{
+				ReceivedFrom: []byte(rpc.from),
+				Meta:         p.tracer.traceRPCMeta(rpc),
+			},
+		}
+		p.tracer.tracer.Trace(evt)
+
+		
 		rpc.from = peer
 		select {
 		case p.incoming <- rpc:

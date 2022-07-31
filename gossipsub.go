@@ -963,6 +963,8 @@ func (gs *GossipSubRouter) Publish(msg *Message) {
 
 	// any peers in the topic?
 	tmap, ok := gs.p.topics[topic]
+	log.Debugf("blox - before publish to topic [%s] with %d peers", topic, len(tmap))
+
 	if !ok {
 		return
 	}
@@ -987,6 +989,8 @@ func (gs *GossipSubRouter) Publish(msg *Message) {
 		for p := range tmap {
 			if !gs.feature(GossipSubFeatureMesh, gs.peers[p]) && gs.score.Score(p) >= gs.publishThreshold {
 				tosend[p] = struct{}{}
+			} else {
+				log.Debugf("blox - publish to topic [%s]. peer not added. score %f | threshold %f | protocol [%s] for peer %s", topic, gs.score.Score(p), gs.publishThreshold, gs.peers[p], p)
 			}
 		}
 
@@ -1016,6 +1020,7 @@ func (gs *GossipSubRouter) Publish(msg *Message) {
 	}
 
 	out := rpcWithMessages(msg.Message)
+	log.Debugf("blox - publish to topic [%s] with %d peers", topic, len(tosend))
 	for pid := range tosend {
 		if pid == from || pid == peer.ID(msg.GetFrom()) {
 			continue
