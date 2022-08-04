@@ -3,6 +3,7 @@ package pubsub
 import (
 	"bufio"
 	"context"
+	"fmt"
 	"io"
 	"time"
 
@@ -89,7 +90,11 @@ func (p *PubSub) handleNewStream(s network.Stream) {
 		}
 		p.tracer.tracer.Trace(evt)
 
-		
+		meta := p.tracer.traceRPCMeta(rpc)
+		for _, msg := range meta.Messages {
+			log.Info(fmt.Sprintf("recive msg %s from topic %s by peer %s", msg.GetMessageID(), *msg.Topic, rpc.from))
+		}
+
 		rpc.from = peer
 		select {
 		case p.incoming <- rpc:
