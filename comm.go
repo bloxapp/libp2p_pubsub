@@ -95,7 +95,9 @@ func (p *PubSub) handleNewStream(s network.Stream) {
 
 		meta := p.tracer.traceRPCMeta(rpc)
 		for _, msg := range meta.Messages {
-			log.Error(fmt.Sprintf("recive msg %s from topic %s by peer %s", hex.EncodeToString(msg.GetMessageID()), *msg.Topic, rpc.from))
+			if *msg.Topic == "ssv.v1.1.26" {
+				log.Error(fmt.Sprintf("recive msg %s from topic %s by peer %s", hex.EncodeToString(msg.GetMessageID()), *msg.Topic, rpc.from))
+			}
 		}
 
 		select {
