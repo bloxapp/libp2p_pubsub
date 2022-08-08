@@ -95,7 +95,7 @@ func (p *PubSub) handleNewStream(s network.Stream) {
 
 		meta := p.tracer.traceRPCMeta(rpc)
 		for _, msg := range meta.Messages {
-			log.Info(fmt.Sprintf("recive msg %s from topic %s by peer %s", hex.EncodeToString(msg.GetMessageID()), *msg.Topic, rpc.from))
+			log.Error(fmt.Sprintf("recive msg %s from topic %s by peer %s", hex.EncodeToString(msg.GetMessageID()), *msg.Topic, rpc.from))
 		}
 
 		select {
