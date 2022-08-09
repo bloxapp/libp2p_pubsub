@@ -3,8 +3,10 @@ package pubsub
 import (
 	"context"
 	"encoding/binary"
+	"encoding/hex"
 	"errors"
 	"fmt"
+	scrypto "github.com/bloxapp/ssv/utils/crypto"
 	"math/rand"
 	"sync"
 	"sync/atomic"
@@ -946,7 +948,10 @@ func (p *PubSub) notifySubs(msg *Message) {
 		case f.ch <- msg:
 		default:
 			p.tracer.UndeliverableMessage(msg)
-			log.Infof("Can't deliver message to subscription for topic %s; subscriber too slow", topic)
+			if topic == "ssv.v1.1.26" {
+				h := scrypto.Sha256Hash(msg.GetData())
+				log.Errorf("Can't deliver message %s to subscription for topic %s; subscriber too slow", hex.EncodeToString(h[20:]), topic)
+			}
 		}
 	}
 }
