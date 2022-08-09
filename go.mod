@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/benbjohnson/clock v1.1.0
+	github.com/bloxapp/ssv v0.2.0
 	github.com/gogo/protobuf v1.3.2
 	github.com/ipfs/go-log v1.0.5
 	github.com/libp2p/go-libp2p-blankhost v0.2.0
