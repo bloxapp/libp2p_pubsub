@@ -2,7 +2,9 @@ package pubsub
 
 import (
 	"context"
+	"encoding/hex"
 	"fmt"
+	scrypto "github.com/bloxapp/ssv/utils/crypto"
 	"math/rand"
 	"sort"
 	"time"
@@ -1173,7 +1175,15 @@ func (gs *GossipSubRouter) sendRPC(p peer.ID, out *RPC) {
 }
 
 func (gs *GossipSubRouter) doDropRPC(rpc *RPC, p peer.ID, reason string) {
-	log.Debugf("dropping message to peer %s: %s", p.Pretty(), reason)
+	for _, pmsg := range rpc.GetPublish() {
+		topic := pmsg.GetTopic()
+		if topic == "ssv.v1.1.26" {
+			h := scrypto.Sha256Hash(pmsg.GetData())
+			log.Error(fmt.Sprintf("do drop RPC msg %s from topic %s by peer %s", hex.EncodeToString(h[20:]), topic, rpc.from))
+		}
+	}
+
+	log.Debugf("dropping message to peer %s: %s: %s", p.Pretty(), reason)
 	gs.tracer.DropRPC(rpc, p)
 	// push control messages that need to be retried
 	ctl := rpc.GetControl()

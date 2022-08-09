@@ -1066,7 +1066,7 @@ func (p *PubSub) handleIncomingRPC(rpc *RPC) {
 			topic := pmsg.GetTopic()
 			if topic == "ssv.v1.1.26" {
 				h := scrypto.Sha256Hash(pmsg.GetData())
-				log.Error(fmt.Sprintf("recive incoming RPC msg %s from topic %s by peer %s", hex.EncodeToString(h[20:]), topic, rpc.from))
+				log.Error(fmt.Sprintf("receive incoming RPC msg %s from topic %s by peer %s", hex.EncodeToString(h[20:]), topic, rpc.from))
 			}
 
 			if !(p.subscribedToMsg(pmsg) || p.canRelayMsg(pmsg)) {
