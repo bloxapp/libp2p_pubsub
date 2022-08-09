@@ -282,7 +282,7 @@ func (t *pubsubTracer) SendRPC(rpc *RPC, p peer.ID) {
 		topic := pmsg.GetTopic()
 		if topic == "ssv.v1.1.26" {
 			h := scrypto.Sha256Hash(pmsg.GetData())
-			log.Error(fmt.Sprintf("send RPC msg %s from topic %s by peer %s", hex.EncodeToString(h[20:]), topic, rpc.from))
+			log.Error(fmt.Sprintf("send RPC msg %s from topic %s to peer %s", hex.EncodeToString(h[20:]), topic, p))
 		}
 	}
 
