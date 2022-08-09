@@ -1,6 +1,9 @@
 package pubsub
 
 import (
+	"encoding/hex"
+	"fmt"
+	scrypto "github.com/bloxapp/ssv/utils/crypto"
 	"time"
 
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -275,6 +278,14 @@ func (t *pubsubTracer) RecvRPC(rpc *RPC) {
 }
 
 func (t *pubsubTracer) SendRPC(rpc *RPC, p peer.ID) {
+	for _, pmsg := range rpc.GetPublish() {
+		topic := pmsg.GetTopic()
+		if topic == "ssv.v1.1.26" {
+			h := scrypto.Sha256Hash(pmsg.GetData())
+			log.Error(fmt.Sprintf("send RPC msg %s from topic %s by peer %s", hex.EncodeToString(h[20:]), topic, rpc.from))
+		}
+	}
+
 	if t == nil {
 		return
 	}
