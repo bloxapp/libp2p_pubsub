@@ -3,7 +3,6 @@ package pubsub
 import (
 	"context"
 	"encoding/binary"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"math/rand"
@@ -13,7 +12,6 @@ import (
 
 	pb "github.com/libp2p/go-libp2p-pubsub/pb"
 
-	scrypto "github.com/bloxapp/ssv/utils/crypto"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/discovery"
 	"github.com/libp2p/go-libp2p-core/host"
@@ -1062,13 +1060,6 @@ func (p *PubSub) handleIncomingRPC(rpc *RPC) {
 
 	case AcceptAll:
 		for _, pmsg := range rpc.GetPublish() {
-
-			topic := pmsg.GetTopic()
-			if topic == "ssv.v1.1.26" {
-				h := scrypto.Sha256Hash(pmsg.GetData())
-				log.Error(fmt.Sprintf("receive incoming RPC msg %s from topic %s by peer %s", hex.EncodeToString(h[20:]), topic, rpc.from))
-			}
-
 			if !(p.subscribedToMsg(pmsg) || p.canRelayMsg(pmsg)) {
 				log.Debug("received message in topic we didn't subscribe to; ignoring message")
 				continue
