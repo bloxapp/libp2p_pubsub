@@ -1177,7 +1177,7 @@ func (gs *GossipSubRouter) sendRPC(p peer.ID, out *RPC) {
 func (gs *GossipSubRouter) doDropRPC(rpc *RPC, p peer.ID, reason string) {
 	for _, pmsg := range rpc.GetPublish() {
 		topic := pmsg.GetTopic()
-		if topic == "ssv.v1.1.26" {
+		if topic == "ssv.v2.1.26" {
 			h := scrypto.Sha256Hash(pmsg.GetData())
 			log.Error(fmt.Sprintf("do drop RPC msg %s from topic %s by peer %s", hex.EncodeToString(h[20:]), topic, rpc.from))
 		}

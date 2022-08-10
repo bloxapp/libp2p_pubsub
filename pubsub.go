@@ -948,7 +948,7 @@ func (p *PubSub) notifySubs(msg *Message) {
 		case f.ch <- msg:
 		default:
 			p.tracer.UndeliverableMessage(msg)
-			if topic == "ssv.v1.1.26" {
+			if topic == "ssv.v2.1.26" {
 				h := scrypto.Sha256Hash(msg.GetData())
 				log.Errorf("Can't deliver message %s to subscription for topic %s; subscriber too slow", hex.EncodeToString(h[20:]), topic)
 			}
