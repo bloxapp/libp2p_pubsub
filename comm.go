@@ -97,7 +97,7 @@ func (p *PubSub) handleNewStream(s network.Stream) {
 		control := meta.GetControl()
 		if control != nil {
 			for _, msg := range control.GetIhave() {
-				if msg.GetTopic() == "ssv.v2.1.26" {
+				if msg.GetTopic() == "ssv.v2.26" {
 					for _, id := range msg.GetMessageIDs() {
 						log.Error(fmt.Sprintf("receive Ihave msg %s from topic %s by peer %s", hex.EncodeToString(id), msg.GetTopic(), rpc.from))
 					}
@@ -112,7 +112,7 @@ func (p *PubSub) handleNewStream(s network.Stream) {
 		}
 
 		for _, msg := range meta.Messages {
-			if *msg.Topic == "ssv.v2.1.26" {
+			if *msg.Topic == "ssv.v2.26" {
 				log.Error(fmt.Sprintf("receive msg %s from topic %s by peer %s", hex.EncodeToString(msg.GetMessageID()), *msg.Topic, rpc.from))
 			}
 		}
