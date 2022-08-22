@@ -170,6 +170,8 @@ type PubSub struct {
 	protoMatchFunc ProtocolMatchFn
 
 	ctx context.Context
+
+	msgDelay time.Duration
 }
 
 // PubSubRouter is the message router component of PubSub.
@@ -221,7 +223,7 @@ type Message struct {
 	ID            string
 	ReceivedFrom  peer.ID
 	ValidatorData interface{}
-	Local bool
+	Local         bool
 }
 
 func (m *Message) GetFrom() peer.ID {
@@ -523,6 +525,14 @@ func WithProtocolMatchFn(m ProtocolMatchFn) Option {
 func WithSeenMessagesTTL(ttl time.Duration) Option {
 	return func(ps *PubSub) error {
 		ps.seenMsgTTL = ttl
+		return nil
+	}
+}
+
+// WithMessageDelay configures a desired delay for messages coming from the mesh
+func WithMessageDelay(msgDelay time.Duration) Option {
+	return func(ps *PubSub) error {
+		ps.msgDelay = msgDelay
 		return nil
 	}
 }
@@ -1065,7 +1075,9 @@ func (p *PubSub) handleIncomingRPC(rpc *RPC) {
 				log.Debug("received message in topic we didn't subscribe to; ignoring message")
 				continue
 			}
-
+			if p.msgDelay > 0 {
+				time.Sleep(p.msgDelay)
+			}
 			p.pushMsg(&Message{pmsg, "", rpc.from, nil, false})
 		}
 	}
