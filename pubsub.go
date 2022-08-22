@@ -1076,9 +1076,13 @@ func (p *PubSub) handleIncomingRPC(rpc *RPC) {
 				continue
 			}
 			if p.msgDelay > 0 {
-				time.Sleep(p.msgDelay)
+				m := pmsg
+				_ = time.AfterFunc(p.msgDelay, func() {
+					p.pushMsg(&Message{m, "", rpc.from, nil, false})
+				})
+			} else {
+				p.pushMsg(&Message{pmsg, "", rpc.from, nil, false})
 			}
-			p.pushMsg(&Message{pmsg, "", rpc.from, nil, false})
 		}
 	}
 
